@@ -1,7 +1,4 @@
-#include<iostream>
 #include<bits/stdc++.h>
-#include<stack>
-#include<ctype.h>
 
 using namespace std;
 
@@ -69,11 +66,9 @@ struct Pilha {
     void imprimir(){
     	No* aux = topo;
     	for(int i=0; i<n; i++){
-    		if(i!=0) cout<<" ";
-    		cout<<aux->valor;
+    		cout<<aux->valor<<endl;
     		aux = aux->prox;
 		}
-		cout<<endl;
 	}
 
 };
@@ -137,20 +132,32 @@ struct Fila {
 
 };
 
-Pilha inverterFila(Fila f, Pilha p){
+Fila inverterFila(Fila f){
+	Pilha p;
+	
 	while(f.n>0){
-		//cout<<"frente "<<f.frente()<<" foi empilhado na pilha"<<endl;
+		cout<<"frente "<<f.frente()<<" foi empilhado na pilha"<<endl;
 		p.inserir(f.frente());
 		f.desenfileirar();
 	}
+	cout<<endl;
 	
-	return p;
+	cout<<"Pilha:"<<endl;
+	p.imprimir();
+	cout<<endl;
+	
+	while(p.n>0){
+		cout<<"topo "<<p.topoPilha()<<" foi enfileirado na fila"<<endl;
+		f.enfileirar(p.topoPilha());
+		p.remover();
+	}
+	
+	return f;
 }
 
 int main() {
     
     Fila f;
-    Pilha p;
 	
 	//fila não vazia
     f.enfileirar(10);
@@ -162,10 +169,10 @@ int main() {
     cout<<"Fila antes de inverter"<<endl;
     f.imprimir();
     
-    p = inverterFila(f, p);
+    f = inverterFila(f);
     
     cout<<"Fila depois de inverter"<<endl;
-    p.imprimir();
+    f.imprimir();
 
     return 0;
 }
