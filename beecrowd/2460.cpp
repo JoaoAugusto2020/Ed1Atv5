@@ -19,60 +19,6 @@ struct No {
 
 };
 
-struct Pilha {
-
-    No* topo;
-    int n;
-
-    Pilha() {
-        topo = NULL;
-        n = 0;
-    }
-	
-	//inserindo no inicio(topo)
-    //por praticidade na hora de remover � melhor inserir no inicio
-	void inserir(int valor) {
-        No* novo = new No(valor);
-        if (topo == NULL) {
-            topo = novo;
-        } else {
-            novo->prox = topo;
-            topo = novo;
-        }
-        n++;
-    }
-
-	//removendo no inicio(topo)
-    void remover() {
-        if (n == 0) return;
-        if (n == 1) {
-            delete(topo);
-            topo = NULL;
-            n = 0;
-            return;
-        }
-        No* aux = topo;
-        topo = topo->prox;
-        delete(aux);
-        n--;
-    }
-	
-	//o que est� no inicio
-    int topoPilha() {
-        if (topo == NULL) return 0;
-        return topo->valor;
-    }
-    
-    void imprimir(){
-    	No* aux = topo;
-    	for(int i=0; i<n; i++){
-    		cout<<aux->valor<<endl;
-    		aux = aux->prox;
-		}
-	}
-
-};
-
 struct Fila {
 
     No* inicio;
@@ -114,7 +60,7 @@ struct Fila {
         n--;
     }
 	
-	//o que est� no inicio
+	//o que está no inicio
     int frente() {
         if (inicio == NULL) return 0;
         return inicio->valor;
@@ -130,8 +76,8 @@ struct Fila {
 		cout<<endl;
 	}
 	
-	void removerValor(int val){
-		if (n == 0) return;
+	void removerVal(int val){
+        if (n == 0) return;
         if (n == 1) {
             delete(inicio);
             inicio = NULL;
@@ -139,21 +85,31 @@ struct Fila {
             n = 0;
             return;
         }
-		No* aux = inicio;
-		if(aux->valor == val){
-			inicio = inicio->prox;
-		}else{
-			if(aux->prox->valor == val){
-				if(aux->prox->prox == NULL){
-					aux->prox = NULL;
+        
+        No* aux = inicio;
+        while(aux->prox!=NULL){
+        	//o que quero remover é o primeiro?
+        	if(val==frente()){
+        		desenfileirar();
+        		return;
+			}else
+        	//o meu próximo é o que quero remover?
+        	if(aux->prox->valor == val){
+        		//o próximo do que quero remover é NULL?
+        		if(aux->prox->prox == NULL){
+        			aux->prox = NULL;
 				}else{
 					aux->prox = aux->prox->prox;
 				}
+				n--;
+				return;
+			}else{
+				aux = aux->prox;
 			}
 		}
 		
-		n--;
-	}
+        n--;
+    }
 
 };
 
@@ -168,14 +124,16 @@ int main() {
     	f.enfileirar(val);
 	}
 	
-	//f.imprimir();
+//	cout<<"ANTES DE REMOVER: "<<endl;
+//	f.imprimir();
 	
 	cin>>tam;
 	while(tam--){
 		cin>>val;
-		f.removerValor(val);
+		f.removerVal(val);
 	}
 	
+//	cout<<"DEPOIS DE REMOVER: "<<endl;
 	f.imprimir();
 
     return 0;
