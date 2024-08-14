@@ -1,7 +1,5 @@
 #include<iostream>
 #include<bits/stdc++.h>
-#include<stack>
-#include<ctype.h>
 
 using namespace std;
 
@@ -75,33 +73,23 @@ struct Fila {
         cout<<endl;
     }
     
-    int troca() {
-    	if (n == 0 || n == 1) return 0;
-        int trocas=0;
+    void ordenar() {
+    	if (n == 0 || n == 1) return;
         
         No* aux = inicio;
-        No* anterior = inicio;
-        No* anterior2 = inicio;
-        while (aux != NULL) {
+        while (aux->prox != NULL) {
             if(aux->valor >= aux->prox->valor){
 				aux = aux->prox;
-			}else if(aux->prox != NULL){
-				cout<<"precisa trocar"<<endl;
-				//anterior aponta para o próximo do atual
-				anterior->prox = aux->prox;
-				//o meu atual passa a apontar para o próximo do próximo
-				aux->prox = aux->prox->prox;
-				//o meu próximo passa a apontar para o autal
-				aux->prox->prox = anterior2->prox;
-				cout<<"trocou"<<endl;
-				
-				trocas++;
+			}else{
+				//troca
+				int auxInt=0;
+				auxInt = aux->valor;
+				aux->valor = aux->prox->valor;
+				aux->prox->valor = auxInt;
+				//fimtroca
 			}
-			anterior = anterior->prox;
-			anterior2 = anterior2->prox;
+			
         }
-        
-        return trocas;
     }
 
 };
@@ -114,23 +102,31 @@ int main() {
 	cin>>filas;
 	while(filas--){
 		int qtd=0, totalTrocas=0;
-		Fila f;
+		Fila f, fmolde;
 		
 		//criando a fila
 		cin>>qtd;
-		while(qtd--){
+		for(int i=0; i<qtd; i++){
 			int nota=0;
 			cin>>nota;
 			f.enfileirar(nota);
+			fmolde.enfileirar(nota);
 		}
 		
-		f.imprimir();
-		f.troca();
-		f.imprimir();
+		for(int i=0; i<qtd; i++) f.ordenar();
 		
-		//totalTrocas += f.troca();
+		//confere mudanÃ§as
+		for(int i=0; i<qtd; i++){
+			//cout<<f.frente()<<" == "<<fmolde.frente()<<endl;
+			if(f.frente() != fmolde.frente()){
+				totalTrocas++;
+			}
+			
+			f.desenfileirar();
+			fmolde.desenfileirar();
+		}
 		
-		//cout<<totalTrocas<<endl;
+		cout<<qtd-totalTrocas<<endl;
 	}
 
     return 0;
